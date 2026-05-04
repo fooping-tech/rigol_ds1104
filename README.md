@@ -220,10 +220,10 @@ cp -R .codex/skills/rigol-ds1104z-lan ~/.codex/skills/
 このリポジトリを GitHub で公開した後は、Codex の `$skill-installer` に GitHub のディレクトリ URL を渡してインストールできます。
 
 ```text
-$skill-installer install https://github.com/<owner>/<repo>/tree/main/.codex/skills/rigol-ds1104z-lan
+$skill-installer install https://github.com/fooping-tech/rigol_ds1104/tree/main/.codex/skills/rigol-ds1104z-lan
 ```
 
-`<owner>` と `<repo>` は公開後の GitHub owner/repository 名に置き換えてください。インストール後は Codex を再起動します。
+インストール後は Codex を再起動します。
 
 ## Claude Code Skill として使う
 
