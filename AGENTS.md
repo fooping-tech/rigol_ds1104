@@ -25,6 +25,7 @@ Keep this repository structure so users can install and inspect the Skill easily
     rigol-ds1104z-lan/
       SKILL.md
       scripts/
+      config/
       references/
 pyproject.toml
 uv.lock

@@ -17,7 +17,7 @@ Skill 単体配布でも使えるように、実行例は `uv run --with pyvisa 
 uv sync
 ```
 
-IP アドレスなどの個人環境に固有の情報は、commit しないローカル設定ファイルに書きます。
+IP アドレスなどの個人環境に固有の情報は、commit しないローカル設定ファイルに書きます。このリポジトリ内で使う場合は、作業ディレクトリの `config/rigol.env` を使えます。
 
 ```bash
 cp config/rigol.example.env config/rigol.env
@@ -31,6 +31,21 @@ RIGOL_IP=<YOUR_IP_ADDR>
 ```
 
 `config/rigol.env` は `.gitignore` で除外されています。実IPやシリアル番号など、個人環境に固有の情報は README や commit 済みファイルに書かないでください。
+
+Skill を個人用にコピーして別プロジェクトから使う場合は、共通設定として `~/.config/rigol-ds1104z-lan/rigol.env` を使うのが便利です。
+
+```bash
+mkdir -p ~/.config/rigol-ds1104z-lan
+cp ~/.codex/skills/rigol-ds1104z-lan/config/rigol.example.env ~/.config/rigol-ds1104z-lan/rigol.env
+$EDITOR ~/.config/rigol-ds1104z-lan/rigol.env
+```
+
+`--ip` を省略した場合、ツールは次の順に `RIGOL_IP` を探します。
+
+1. 現在の作業ディレクトリの `config/rigol.env`
+2. `~/.config/rigol-ds1104z-lan/rigol.env`
+3. Skill ディレクトリ内の `config/rigol.env`
+4. shell environment の `RIGOL_IP`
 
 ## 確認済みの実機
 
@@ -58,7 +73,7 @@ uv run --with pyvisa --with pyvisa-py python .codex/skills/rigol-ds1104z-lan/scr
 uv run --with pyvisa --with pyvisa-py python .codex/skills/rigol-ds1104z-lan/scripts/rigol_check_lan.py --ip <YOUR_IP_ADDR> --socket
 ```
 
-`config/rigol.env` に `RIGOL_IP` を設定済みなら `--ip` は省略できます。
+上記いずれかの設定ファイルに `RIGOL_IP` を設定済みなら `--ip` は省略できます。
 
 ```bash
 uv run --with pyvisa --with pyvisa-py python .codex/skills/rigol-ds1104z-lan/scripts/rigol_check_lan.py
@@ -227,7 +242,7 @@ cp -R .codex/skills/rigol-ds1104z-lan ~/.codex/skills/
 uv run --with pyvisa --with pyvisa-py python ~/.codex/skills/rigol-ds1104z-lan/scripts/rigol_check_lan.py
 ```
 
-この実行方法は作業ディレクトリに依存しないため、別プロジェクトを開いている状態でも使えます。ローカル設定ファイルを使う場合は、現在の作業ディレクトリに `config/rigol.env` を置くか、`--config <path>` で明示してください。
+この実行方法は作業ディレクトリに依存しないため、別プロジェクトを開いている状態でも使えます。ローカル設定ファイルを使う場合は、`~/.config/rigol-ds1104z-lan/rigol.env` に置くか、`--config <path>` で明示してください。
 
 ### GitHub から Codex にインストールする
 

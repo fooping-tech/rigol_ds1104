@@ -37,11 +37,16 @@ The Skill-bundled `scripts/` directory is the canonical location for the command
 For local-only settings, copy the example config and edit it:
 
 ```bash
-cp config/rigol.example.env config/rigol.env
-$EDITOR config/rigol.env
+mkdir -p ~/.config/rigol-ds1104z-lan
+cp <SKILL_DIR>/config/rigol.example.env ~/.config/rigol-ds1104z-lan/rigol.env
+$EDITOR ~/.config/rigol-ds1104z-lan/rigol.env
 ```
 
-If `--ip` is omitted, the tools read `RIGOL_IP` from `config/rigol.env` and then from the shell environment:
+If `--ip` is omitted, the tools read `RIGOL_IP` from these locations, then from the shell environment:
+
+1. `config/rigol.env` in the current working directory.
+2. `~/.config/rigol-ds1104z-lan/rigol.env`.
+3. `<SKILL_DIR>/config/rigol.env`.
 
 ```bash
 uv run --with pyvisa --with pyvisa-py python <SKILL_DIR>/scripts/rigol_check_lan.py
