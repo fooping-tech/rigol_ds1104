@@ -3,6 +3,7 @@ name = "rigol-ds1104z-lan"
 version = "0.1.0"
 description = "RIGOL DS1104Z LAN/SCPI measurement helpers"
 requires-python = ">=3.9"
+license = "MIT"
 dependencies = [
     "matplotlib>=3.7",
     "numpy>=1.24",
