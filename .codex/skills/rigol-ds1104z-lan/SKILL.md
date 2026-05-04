@@ -32,14 +32,20 @@ Run tools through the managed environment:
 uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR>
 ```
 
-If `--ip` is omitted, the tools read `RIGOL_IP` from the environment:
+For local-only settings, copy the example config and edit it:
 
 ```bash
-export RIGOL_IP=<YOUR_IP_ADDR>
+cp config/rigol.example.env config/rigol.env
+$EDITOR config/rigol.env
+```
+
+If `--ip` is omitted, the tools read `RIGOL_IP` from `config/rigol.env` and then from the shell environment:
+
+```bash
 uv run python tools/rigol/rigol_check_lan.py
 ```
 
-Do not commit personal IP addresses, serial numbers, or lab-specific identifiers.
+Use `--config <path>` for another local env file. Do not commit personal IP addresses, serial numbers, or lab-specific identifiers.
 
 The bundled tools only require Python standard library plus `pyvisa`; `numpy`, `matplotlib`, and `pandas` are included for later analysis and plotting.
 

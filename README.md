@@ -16,13 +16,20 @@ Python 環境は `uv` で作成します。
 uv sync
 ```
 
-IP アドレスはコマンドごとに `--ip` で渡せます。毎回入力したくない場合は、ローカル shell で `RIGOL_IP` を設定してください。
+IP アドレスなどの個人環境に固有の情報は、commit しないローカル設定ファイルに書きます。
 
 ```bash
-export RIGOL_IP=<YOUR_IP_ADDR>
+cp config/rigol.example.env config/rigol.env
+$EDITOR config/rigol.env
 ```
 
-実IPやシリアル番号など、個人環境に固有の情報は README や commit 済みファイルに書かないでください。
+`config/rigol.env` の例:
+
+```bash
+RIGOL_IP=<YOUR_IP_ADDR>
+```
+
+`config/rigol.env` は `.gitignore` で除外されています。実IPやシリアル番号など、個人環境に固有の情報は README や commit 済みファイルに書かないでください。
 
 ## 確認済みの実機
 
@@ -50,7 +57,7 @@ uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR>
 uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR> --socket
 ```
 
-`RIGOL_IP` を設定済みなら `--ip` は省略できます。
+`config/rigol.env` に `RIGOL_IP` を設定済みなら `--ip` は省略できます。
 
 ```bash
 uv run python tools/rigol/rigol_check_lan.py
@@ -88,6 +95,12 @@ uv run python tools/rigol/rigol_single_capture.py \
   --slope falling \
   --level 1.5 \
   --outdir captures
+```
+
+別の設定ファイルを使う場合は `--config` を指定します。
+
+```bash
+uv run python tools/rigol/rigol_check_lan.py --config config/lab-a.env
 ```
 
 CH1 の rising edge を single-shot capture します。
