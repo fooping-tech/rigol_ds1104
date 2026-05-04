@@ -13,3 +13,23 @@
 - For logic, GPIO, switch, sensor, and power-rail signals, start with DC coupling.
 - Before capture, give the user specific probe-tip and ground-connection instructions.
 - Keep measured facts separate from interpretation in reports.
+
+## Open Source Repository Structure
+
+Keep this repository structure so users can install and inspect the Skill easily:
+
+```text
+.codex/
+  skills/
+    rigol-ds1104z-lan/
+      SKILL.md
+      references/
+tools/
+  rigol/
+pyproject.toml
+uv.lock
+README.md
+AGENTS.md
+```
+
+If bundling a Claude Code project skill directly, the same Skill may also be placed at `.claude/skills/rigol-ds1104z-lan/`. Keep `.codex/skills/` and `.claude/skills/` synchronized if both are committed. To avoid duplicate maintenance, prefer documenting the copy/install steps in `README.md` instead of committing both copies.
