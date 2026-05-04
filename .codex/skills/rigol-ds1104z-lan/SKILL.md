@@ -7,7 +7,7 @@ description: Use this skill when controlling a RIGOL DS1104Z oscilloscope over L
 
 ## Purpose
 
-Use this skill to control a RIGOL DS1104Z oscilloscope over LAN with Python and SCPI, capture reproducible measurement evidence, and turn captured waveforms into a concise engineering report. Prefer saved evidence over visual-only conclusions: screenshot PNG, waveform CSV, setup JSON, and report Markdown belong together.
+Use this skill to control a RIGOL DS1104Z oscilloscope over LAN with Python and SCPI, capture reproducible measurement evidence, and turn captured waveforms into a concise Japanese engineering report. Prefer saved evidence over visual-only conclusions: screenshot PNG, waveform CSV, setup JSON, and report Markdown belong together.
 
 ## Assumptions
 
@@ -179,14 +179,23 @@ Base recommendations on measured evidence:
 
 ## Measurement Report Format
 
-Use `references/signal_capture_report.md` for the report structure. Every report should answer:
+Use `references/signal_capture_report.md` for the report structure.
 
-- What waveform was captured?
-- Where was the probe connected?
-- What setup was used?
-- What facts are visible in the CSV and screenshot?
-- What is inferred, and what remains uncertain?
-- What should be measured next?
+Report requirements:
+
+- Write the report in Japanese.
+- Embed the screenshot image in the Markdown report so it is visible when the report is opened.
+- Present saved evidence, setup, measured results, and interpretation as Markdown tables.
+- Keep measured facts and interpretation in separate tables or sections.
+
+Every report should answer these questions in Japanese:
+
+- どの波形を測定したか。
+- プローブ先端とGNDをどこへ接続したか。
+- どの測定条件を使ったか。
+- CSVとスクリーンショットから読み取れる測定事実は何か。
+- どこまでが解釈で、何が不確かか。
+- 次に何を測るべきか。
 
 ## Troubleshooting
 
@@ -197,6 +206,9 @@ Read `references/troubleshooting.md` when LAN, PyVISA, binary transfer, screensh
 - Be specific about probe placement and grounding.
 - Separate measured facts from interpretation.
 - Cite saved PNG, CSV, and JSON filenames.
+- Write reports in Japanese.
+- Embed the screenshot image in reports using Markdown image syntax.
+- Use tables for setup, evidence, measured results, and interpretation.
 - State when no real instrument test was run.
 - Do not use AUTO setup as the primary method.
 - Do not make voltage/timing claims until waveform CSV is scaled from `:WAV:PRE?`.

@@ -1,97 +1,130 @@
-# Signal Capture Report Guide
+# 信号キャプチャレポートガイド
 
-Use this reference after capturing a screenshot, waveform CSV, and setup JSON. The goal is to turn oscilloscope evidence into a short engineering report that says what was measured, what can be read from the waveform, and what should happen next.
+スクリーンショット、波形CSV、setup JSONを保存したあと、この参照に従って日本語のMarkdownレポートを作成する。目的は、何を測定したか、波形から読み取れる事実、次に何を測るべきかを短く再現可能に記録すること。
 
-## Before Capture: Probe Instructions
+## レポート出力ルール
 
-Tell the user exactly where to connect the probe before arming the capture.
+- レポート本文は日本語で書く。
+- 保存したスクリーンショットPNGをMarkdown画像として埋め込み、レポート上で波形画像が表示されるようにする。
+- 保存証拠、測定条件、測定結果、解釈はMarkdown表で表示する。
+- 測定事実と解釈は混ぜず、別の表または別セクションに分ける。
+- 電圧や時間の数値は、必ず`:WAV:PRE?`を解析してスケーリングしたCSVを根拠にする。
 
-Minimum instruction set:
+## キャプチャ前: プローブ接続指示
 
-- Signal node: name the physical pin, pad, connector, test point, or component terminal.
-- Ground: name the board ground point and keep the ground lead short.
-- Channel: assign `CHAN1` to `CHAN4`.
-- Probe attenuation: usually `10x`; confirm the scope setting matches the probe switch.
-- Coupling: start with `DC` for logic, GPIO, switch, sensor, and power rails.
-- Trigger: source channel, slope, level, and expected event.
+キャプチャを開始する前に、プローブ先端とGNDをどこへ接続するかを具体的にユーザーへ伝える。
 
-Examples:
+最低限伝える項目:
 
-- MCU GPIO: "Connect CH1 probe tip to the MCU GPIO pad or nearest accessible trace. Connect the ground spring or ground clip to the MCU board ground next to the device."
-- Power rail: "Connect CH1 tip at the load-side VDD pin, not only the regulator output. Use a short ground spring if possible."
-- I2C/SPI/UART: "Connect the probe at the receiver-side pin when checking signal integrity or thresholds."
-- PWM/load: "Capture the controller output first, then capture the load-side node if ringing or voltage drop is suspected."
+- 信号ノード: 物理ピン、パッド、コネクタ、テストポイント、部品端子の名前を示す。
+- GND: 基板上のGND点を示し、GNDリードは短くする。
+- チャンネル: `CHAN1`から`CHAN4`のどれを使うかを示す。
+- プローブ減衰比: 通常は`10x`。プローブスイッチとスコープ設定が一致していることを確認する。
+- カップリング: ロジック、GPIO、スイッチ、センサー、電源レールはまず`DC`で始める。
+- トリガ: ソースチャンネル、エッジ方向、レベル、期待するイベントを示す。
 
-## Report Template
+例:
+
+- MCU GPIO: 「CH1プローブ先端をMCU GPIOパッドまたは最寄りのアクセス可能な配線へ接続し、GNDスプリングまたはGNDクリップをMCU近くの基板GNDへ接続してください。」
+- 電源レール: 「CH1先端はレギュレータ出力だけでなく、負荷側VDDピンで測ってください。可能なら短いGNDスプリングを使ってください。」
+- I2C/SPI/UART: 「信号品質やしきい値を確認する場合は、受信側ピンで測ってください。」
+- PWM/負荷: 「まず制御出力を測り、リンギングや電圧降下が疑われる場合は負荷側ノードも測ってください。」
+
+## レポートテンプレート
 
 ```markdown
-# Signal Capture Report
+# 信号キャプチャレポート
 
-## Summary
-- Measurement purpose:
-- Captured signal:
-- Result:
-- Recommendation:
+## 概要
 
-## Probe and Setup
-- Instrument:
-- `*IDN?`:
-- Resource:
-- Channel:
-- Probe location:
-- Ground reference:
-- Probe attenuation:
-- Coupling:
-- Vertical scale:
-- Time scale:
-- Trigger mode:
-- Trigger source:
-- Trigger slope:
-- Trigger level:
+| 項目 | 内容 |
+|---|---|
+| 測定目的 |  |
+| 測定信号 |  |
+| 結果 |  |
+| 推奨事項 |  |
 
-## Saved Evidence
-- Screenshot PNG:
-- Waveform CSV:
-- Setup JSON:
-- Report generated:
+## 波形画像
 
-## What the Waveform Shows
-- Idle or baseline voltage:
-- High level:
-- Low level:
-- Peak voltage:
-- Minimum voltage:
-- Period or pulse width:
-- Rise/fall behavior:
-- Repeated threshold crossings:
-- Noise, ringing, overshoot, or undershoot:
+![オシロスコープ画面](./rigol_screenshot_YYYYMMDD_HHMMSS.png)
 
-## Interpretation
-- Measured facts:
-- Likely cause:
-- Uncertainty:
-- Firmware implication:
-- Hardware implication:
+## 保存証拠
 
-## Next Capture
-- Probe:
-- Trigger:
-- Scale changes:
-- Why this next capture matters:
+| 種類 | ファイル |
+|---|---|
+| スクリーンショットPNG | `captures/...png` |
+| 波形CSV | `captures/...csv` |
+| セットアップJSON | `captures/...json` |
+| 波形JSON | `captures/...json` |
+| レポート生成日時 |  |
+
+## プローブと測定条件
+
+| 項目 | 内容 |
+|---|---|
+| 計測器 |  |
+| `*IDN?` |  |
+| リソース |  |
+| チャンネル |  |
+| プローブ位置 |  |
+| GND基準 |  |
+| プローブ減衰比 |  |
+| カップリング |  |
+| 垂直スケール |  |
+| 垂直オフセット |  |
+| 時間スケール |  |
+| 時間オフセット |  |
+| トリガモード |  |
+| トリガソース |  |
+| トリガエッジ |  |
+| トリガレベル |  |
+
+## 測定結果
+
+| 項目 | 値 | 根拠 |
+|---|---:|---|
+| サンプル数 |  | CSV / `:WAV:PRE?` |
+| サンプル間隔 |  | `:WAV:PRE?` |
+| 最小電圧 |  | CSV |
+| 最大電圧 |  | CSV |
+| ピークツーピーク電圧 |  | CSV |
+| 平均電圧 |  | CSV |
+| 周期またはパルス幅 |  | CSV |
+| しきい値横切り回数 |  | CSV |
+| オーバーシュート/アンダーシュート |  | CSV / スクリーンショット |
+
+## 解釈
+
+| 項目 | 内容 |
+|---|---|
+| 測定事実 |  |
+| 推定される原因 |  |
+| 不確かさ |  |
+| ファームウェア上の示唆 |  |
+| ハードウェア上の示唆 |  |
+
+## 次のキャプチャ
+
+| 項目 | 内容 |
+|---|---|
+| プローブ位置 |  |
+| トリガ条件 |  |
+| スケール変更 |  |
+| 次に測る理由 |  |
 ```
 
-## Reading the Evidence
+## 証拠の読み方
 
-- Treat the CSV as the source of truth for timing and voltage.
-- Treat the screenshot as context for trigger position, channel visibility, and operator review.
-- Treat setup JSON as the audit trail for coupling, scale, trigger, resource, and timestamp.
-- Separate measured facts from interpretation.
-- If a claim depends on threshold crossings, specify the threshold used.
+- タイミングと電圧の根拠はCSVを優先する。
+- スクリーンショットはトリガ位置、チャンネル表示、操作者レビューの文脈として扱う。
+- setup JSONはカップリング、スケール、トリガ、リソース、時刻の監査証跡として扱う。
+- 測定事実と解釈を分ける。
+- しきい値横切りに依存する主張では、使ったしきい値を明記する。
 
-## Common Report Conclusions
+## よくあるレポート結論
 
-- Clean digital transition: one threshold crossing per edge, stable high and low levels, no meaningful overshoot or repeated crossings.
-- Slow edge: transition spends too much time near the receiving threshold; recommend firmware qualification or hardware edge conditioning.
-- Ringing or overshoot: repeated crossings or voltage excursions are visible; recommend checking wiring, termination, grounding, and input conditioning.
-- Power dip: rail minimum and duration are visible; compare against MCU or peripheral brownout/reset limits.
-- Protocol issue: waveform timing or voltage levels differ from expected bus requirements; capture both transmitter and receiver side when possible.
+- クリーンなデジタル遷移: 各エッジのしきい値横切りが1回で、High/Lowレベルが安定し、有意なオーバーシュートや繰り返し横切りがない。
+- 遅いエッジ: 受信しきい値付近に長く留まっている。ファームウェア側の入力認定またはハードウェア側のエッジ整形を検討する。
+- リンギングまたはオーバーシュート: 繰り返し横切りや電圧逸脱が見える。配線、終端、GND、入力保護/整形を確認する。
+- 電源ディップ: レール最小値と継続時間を記録し、MCUや周辺ICのブラウンアウト/リセット条件と比較する。
+- プロトコル問題: タイミングまたは電圧レベルがバス要件と合わない。可能なら送信側と受信側の両方を測る。

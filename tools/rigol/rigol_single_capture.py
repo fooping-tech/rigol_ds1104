@@ -17,6 +17,7 @@ from rigol_common import add_ip_argument, resolve_ip
 
 
 DEFAULT_TIMEOUT_MS = 15000
+SCREENSHOT_COMMAND = ":DISP:DATA? ON,OFF,PNG"
 
 
 def timestamp() -> str:
@@ -143,7 +144,7 @@ def run_capture(args: argparse.Namespace) -> tuple[Path, Path]:
         time.sleep(args.wait)
         write(scope, ":STOP")
 
-        png = read_ieee_block(scope, ":DISP:DATA? PNG")
+        png = read_ieee_block(scope, SCREENSHOT_COMMAND)
         if not png.startswith(b"\x89PNG\r\n\x1a\n"):
             raise RuntimeError("Screenshot payload was received but does not look like a PNG file")
 
@@ -169,7 +170,7 @@ def run_capture(args: argparse.Namespace) -> tuple[Path, Path]:
             "trigger_slope_scpi": slope_to_scpi(args.slope),
             "trigger_level_v": args.level,
             "wait_s": args.wait,
-            "commands": commands + [":STOP", ":DISP:DATA? PNG"],
+            "commands": commands + [":STOP", SCREENSHOT_COMMAND],
             "screenshot_png": str(png_path),
         }
         json_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")

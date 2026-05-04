@@ -16,6 +16,7 @@ from rigol_common import add_ip_argument, resolve_ip
 
 
 DEFAULT_TIMEOUT_MS = 15000
+SCREENSHOT_COMMAND = ":DISP:DATA? ON,OFF,PNG"
 
 
 def timestamp() -> str:
@@ -69,7 +70,7 @@ def capture_screenshot(ip: str, socket: bool, outdir: Path, timeout_ms: int) -> 
     try:
         idn = str(scope.query("*IDN?")).strip()
         print(f"*IDN?: {idn}")
-        png = read_ieee_block(scope, ":DISP:DATA? PNG")
+        png = read_ieee_block(scope, SCREENSHOT_COMMAND)
         if not png.startswith(b"\x89PNG\r\n\x1a\n"):
             raise RuntimeError("Screenshot payload was received but does not look like a PNG file")
 
@@ -83,7 +84,7 @@ def capture_screenshot(ip: str, socket: bool, outdir: Path, timeout_ms: int) -> 
                 {
                     "idn": idn,
                     "resource": resource,
-                    "command": ":DISP:DATA? PNG",
+                    "command": SCREENSHOT_COMMAND,
                     "screenshot_png": str(png_path),
                     "timestamp": base.removeprefix("rigol_screenshot_"),
                 },
