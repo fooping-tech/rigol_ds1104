@@ -12,6 +12,8 @@ from typing import Any
 
 import pyvisa
 
+from rigol_common import add_ip_argument, resolve_ip
+
 
 DEFAULT_TIMEOUT_MS = 15000
 
@@ -100,7 +102,7 @@ def capture_screenshot(ip: str, socket: bool, outdir: Path, timeout_ms: int) -> 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Capture a DS1104Z screenshot as PNG.")
-    parser.add_argument("--ip", required=True, help="Oscilloscope IPv4 address")
+    add_ip_argument(parser)
     parser.add_argument("--socket", action="store_true", help="Use TCPIP0::<IP>::5555::SOCKET instead of INSTR")
     parser.add_argument("--outdir", default="captures", help="Output directory")
     parser.add_argument("--timeout-ms", type=int, default=DEFAULT_TIMEOUT_MS, help="VISA timeout in milliseconds")
@@ -110,7 +112,8 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     try:
-        path = capture_screenshot(args.ip, args.socket, Path(args.outdir), args.timeout_ms)
+        ip = resolve_ip(args)
+        path = capture_screenshot(ip, args.socket, Path(args.outdir), args.timeout_ms)
     except Exception as exc:  # noqa: BLE001
         print(f"ERROR: Failed to capture screenshot: {exc}", file=sys.stderr)
         return 1

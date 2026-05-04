@@ -13,6 +13,8 @@ from typing import Any, Union
 
 import pyvisa
 
+from rigol_common import add_ip_argument, resolve_ip
+
 
 DEFAULT_TIMEOUT_MS = 15000
 PREAMBLE_KEYS = [
@@ -107,9 +109,10 @@ def read_ieee_block(scope: Any, command: str) -> bytes:
 
 
 def export_waveform(args: argparse.Namespace) -> tuple[Path, Path]:
+    ip = resolve_ip(args)
     channel = normalize_channel(args.channel)
     outdir = Path(args.outdir)
-    rm, scope, resource = open_scope(args.ip, args.socket, args.timeout_ms)
+    rm, scope, resource = open_scope(ip, args.socket, args.timeout_ms)
     try:
         idn = str(scope.query("*IDN?")).strip()
         print(f"*IDN?: {idn}")
@@ -164,7 +167,7 @@ def export_waveform(args: argparse.Namespace) -> tuple[Path, Path]:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Export a DS1104Z waveform CSV from the displayed record.")
-    parser.add_argument("--ip", required=True, help="Oscilloscope IPv4 address")
+    add_ip_argument(parser)
     parser.add_argument("--socket", action="store_true", help="Use TCPIP0::<IP>::5555::SOCKET instead of INSTR")
     parser.add_argument("--channel", default="CHAN1", help="Waveform source channel: CHAN1-CHAN4 or 1-4")
     parser.add_argument("--outdir", default="captures", help="Output directory")

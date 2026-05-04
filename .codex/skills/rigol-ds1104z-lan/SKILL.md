@@ -29,8 +29,17 @@ uv sync
 Run tools through the managed environment:
 
 ```bash
-uv run python tools/rigol/rigol_check_lan.py --ip 192.168.1.100
+uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR>
 ```
+
+If `--ip` is omitted, the tools read `RIGOL_IP` from the environment:
+
+```bash
+export RIGOL_IP=<YOUR_IP_ADDR>
+uv run python tools/rigol/rigol_check_lan.py
+```
+
+Do not commit personal IP addresses, serial numbers, or lab-specific identifiers.
 
 The bundled tools only require Python standard library plus `pyvisa`; `numpy`, `matplotlib`, and `pandas` are included for later analysis and plotting.
 
@@ -46,8 +55,8 @@ The bundled tools only require Python standard library plus `pyvisa`; `numpy`, `
 Minimum connection test:
 
 ```bash
-uv run python tools/rigol/rigol_check_lan.py --ip 192.168.1.100
-uv run python tools/rigol/rigol_check_lan.py --ip 192.168.1.100 --socket
+uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR>
+uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR> --socket
 ```
 
 ## Embedded Measurement Defaults

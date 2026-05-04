@@ -9,6 +9,8 @@ from typing import Any
 
 import pyvisa
 
+from rigol_common import add_ip_argument, resolve_ip
+
 
 DEFAULT_TIMEOUT_MS = 5000
 
@@ -45,7 +47,7 @@ def query_idn(ip: str, socket: bool, timeout_ms: int) -> str:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Check DS1104Z LAN connection with *IDN?.")
-    parser.add_argument("--ip", required=True, help="Oscilloscope IPv4 address, e.g. 192.168.1.100")
+    add_ip_argument(parser)
     parser.add_argument("--socket", action="store_true", help="Use TCPIP0::<IP>::5555::SOCKET instead of INSTR")
     parser.add_argument("--timeout-ms", type=int, default=DEFAULT_TIMEOUT_MS, help="VISA timeout in milliseconds")
     return parser.parse_args()
@@ -54,10 +56,12 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     try:
-        idn = query_idn(args.ip, args.socket, args.timeout_ms)
+        ip = resolve_ip(args)
+        idn = query_idn(ip, args.socket, args.timeout_ms)
     except Exception as exc:  # noqa: BLE001 - CLI should show actionable context.
         mode = "SOCKET" if args.socket else "INSTR"
-        print(f"ERROR: Failed to query *IDN? using {mode} mode for {args.ip}: {exc}", file=sys.stderr)
+        ip_text = args.ip or "RIGOL_IP"
+        print(f"ERROR: Failed to query *IDN? using {mode} mode for {ip_text}: {exc}", file=sys.stderr)
         return 1
 
     print(f"*IDN?: {idn}")

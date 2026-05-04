@@ -16,6 +16,14 @@ Python 環境は `uv` で作成します。
 uv sync
 ```
 
+IP アドレスはコマンドごとに `--ip` で渡せます。毎回入力したくない場合は、ローカル shell で `RIGOL_IP` を設定してください。
+
+```bash
+export RIGOL_IP=<YOUR_IP_ADDR>
+```
+
+実IPやシリアル番号など、個人環境に固有の情報は README や commit 済みファイルに書かないでください。
+
 ## 確認済みの実機
 
 この作業環境では、以下の実機と通信できることを確認済みです。
@@ -42,10 +50,23 @@ uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR>
 uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR> --socket
 ```
 
+`RIGOL_IP` を設定済みなら `--ip` は省略できます。
+
+```bash
+uv run python tools/rigol/rigol_check_lan.py
+uv run python tools/rigol/rigol_check_lan.py --socket
+```
+
 スクリーンショットを保存します。
 
 ```bash
 uv run python tools/rigol/rigol_screenshot.py --ip <YOUR_IP_ADDR> --outdir captures
+```
+
+または:
+
+```bash
+uv run python tools/rigol/rigol_screenshot.py --outdir captures
 ```
 
 CH1 の falling edge を single-shot capture します。
@@ -53,6 +74,16 @@ CH1 の falling edge を single-shot capture します。
 ```bash
 uv run python tools/rigol/rigol_single_capture.py \
   --ip <YOUR_IP_ADDR> \
+  --channel CHAN1 \
+  --slope falling \
+  --level 1.5 \
+  --outdir captures
+```
+
+`RIGOL_IP` 設定済みの場合:
+
+```bash
+uv run python tools/rigol/rigol_single_capture.py \
   --channel CHAN1 \
   --slope falling \
   --level 1.5 \
