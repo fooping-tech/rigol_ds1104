@@ -51,22 +51,19 @@ $EDITOR ~/.config/rigol-ds1104z-lan/rigol.env
 3. Skill ディレクトリ内の `config/rigol.env`
 4. shell environment の `RIGOL_IP`
 
-## 確認済みの実機
+## 接続方式
 
-この作業環境では、以下の実機と通信できることを確認済みです。
-
-```text
-RIGOL TECHNOLOGIES,DS1104Z Plus,<YOUR_SERIAL>,00.04.05.SP2
-```
-
-`<YOUR_IP_ADDR>` では次の両方で `*IDN?` が成功しました。
+通常は `TCPIP0::<IP>::INSTR` を優先します。
 
 ```text
-TCPIP0::<YOUR_IP_ADDR>::INSTR
-TCPIP0::<YOUR_IP_ADDR>::5555::SOCKET
+TCPIP0::<IP>::INSTR
 ```
 
-通常は `INSTR` を優先し、失敗した場合だけ socket mode を試してください。
+`INSTR` で接続できない場合は、socket mode を試してください。
+
+```text
+TCPIP0::<IP>::5555::SOCKET
+```
 
 ## クイックスタート
 
