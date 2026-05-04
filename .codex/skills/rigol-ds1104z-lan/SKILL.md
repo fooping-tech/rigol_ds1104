@@ -20,17 +20,19 @@ Use this skill to control a RIGOL DS1104Z oscilloscope over LAN with Python and 
 
 ## Python Environment
 
-Use `uv` for the local Python environment:
+For Skill-only use, run the bundled scripts with ephemeral `uv` dependencies:
 
 ```bash
-uv sync
+uv run --with pyvisa --with pyvisa-py python <SKILL_DIR>/scripts/rigol_check_lan.py --ip <YOUR_IP_ADDR>
 ```
 
-Run tools through the managed environment:
+When this repository is open as the working directory, the same scripts are available at:
 
 ```bash
-uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR>
+.codex/skills/rigol-ds1104z-lan/scripts/
 ```
+
+The Skill-bundled `scripts/` directory is the canonical location for the command-line tools.
 
 For local-only settings, copy the example config and edit it:
 
@@ -42,12 +44,12 @@ $EDITOR config/rigol.env
 If `--ip` is omitted, the tools read `RIGOL_IP` from `config/rigol.env` and then from the shell environment:
 
 ```bash
-uv run python tools/rigol/rigol_check_lan.py
+uv run --with pyvisa --with pyvisa-py python <SKILL_DIR>/scripts/rigol_check_lan.py
 ```
 
 Use `--config <path>` for another local env file. Do not commit personal IP addresses, serial numbers, or lab-specific identifiers.
 
-The bundled tools only require Python standard library plus `pyvisa`; `numpy`, `matplotlib`, and `pandas` are included for later analysis and plotting.
+The bundled capture tools only require Python standard library plus `pyvisa` and `pyvisa-py`.
 
 ## LAN Connection Checklist
 
@@ -61,8 +63,8 @@ The bundled tools only require Python standard library plus `pyvisa`; `numpy`, `
 Minimum connection test:
 
 ```bash
-uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR>
-uv run python tools/rigol/rigol_check_lan.py --ip <YOUR_IP_ADDR> --socket
+uv run --with pyvisa --with pyvisa-py python <SKILL_DIR>/scripts/rigol_check_lan.py --ip <YOUR_IP_ADDR>
+uv run --with pyvisa --with pyvisa-py python <SKILL_DIR>/scripts/rigol_check_lan.py --ip <YOUR_IP_ADDR> --socket
 ```
 
 ## Embedded Measurement Defaults
@@ -157,7 +159,7 @@ Scaling rule:
 
 ## Single-Shot Capture Procedure
 
-Use `tools/rigol/rigol_single_capture.py` when a transient must be captured once.
+Use `scripts/rigol_single_capture.py` when a transient must be captured once.
 
 1. Identify the physical node and ground reference.
 2. Configure channel coupling, probe ratio, vertical scale, offset, time scale, trigger source, slope, and level.
@@ -165,7 +167,7 @@ Use `tools/rigol/rigol_single_capture.py` when a transient must be captured once
 4. Cause the event under test.
 5. Stop after the requested wait period.
 6. Save screenshot PNG and setup JSON.
-7. Export waveform CSV with `tools/rigol/rigol_waveform_csv.py`.
+7. Export waveform CSV with `scripts/rigol_waveform_csv.py`.
 8. Produce a Markdown report using `references/signal_capture_report.md`.
 
 ## Firmware and Hardware Review
